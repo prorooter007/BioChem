@@ -26,7 +26,7 @@
             android:name=".TestName"
             android:exported="false" />
         <activity
-            android:name=".SelectTest"
+            android:name=".nextpg2"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

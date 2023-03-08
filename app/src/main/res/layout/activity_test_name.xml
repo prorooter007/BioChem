@@ -59,19 +59,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/lab" />
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="269dp"
-        android:layout_height="248dp"
-        android:layout_marginBottom="284dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/_0230303_162343_11" />
-
     <TextView
         android:id="@+id/textView4"
         android:layout_width="283dp"

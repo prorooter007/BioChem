@@ -27,8 +27,15 @@ class TestName : AppCompatActivity() {
 
         val  textView_4 = findViewById<TextView>(R.id.textView4)
         var text = intent.getStringExtra("key_1")
+
         if (text != null){
             textView_4.setText(text)
+        }
+
+        var text_2 = intent.getStringExtra("key_2")
+
+        if (text_2 != null){
+            textView_4.setText(text_2)
         }
 
 

@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.widget.Button
 
 class nextpg2 : AppCompatActivity() {
+
+    var value_1="URIC ACID TEST";
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nextpg2)
@@ -17,6 +20,7 @@ class nextpg2 : AppCompatActivity() {
             val mainActivityIntent = Intent(
                 applicationContext, TestName::class.java
             )
+            mainActivityIntent.putExtra("key_1", value_1)
             startActivity(mainActivityIntent)
         }
     }

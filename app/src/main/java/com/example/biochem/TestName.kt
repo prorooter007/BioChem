@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
@@ -17,10 +18,18 @@ class TestName : AppCompatActivity() {
     lateinit var imageView: ImageView
     lateinit var button: Button
     val REQUEST_IMAGE_CAPTURE=100
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test_name)
 
+
+        val  textView_4 = findViewById<TextView>(R.id.textView4)
+        var text = intent.getStringExtra("key_1")
+        if (text != null){
+            textView_4.setText(text)
+        }
 
 
         val buttonSecondActivity: Button = findViewById(

@@ -12,6 +12,7 @@ class nextpg2 : AppCompatActivity() {
     var value_3 = "GLUCOSE TEST";
     var value_4 = "CHOLESTEROL";
     var value_5 = "TOTAL PROTEIN";
+    var value_6 = "TRIGLYCERIDES";
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +75,17 @@ class nextpg2 : AppCompatActivity() {
                 applicationContext, TestName::class.java
             )
             mainActivityIntent.putExtra("key_5", value_5)
+            startActivity(mainActivityIntent)
+        }
+
+        val buttonMainActivit6: Button = findViewById(
+            R.id.button12
+        )
+        buttonMainActivit6.setOnClickListener {
+            val mainActivityIntent = Intent(
+                applicationContext, TestName::class.java
+            )
+            mainActivityIntent.putExtra("key_6", value_6)
             startActivity(mainActivityIntent)
         }
     }

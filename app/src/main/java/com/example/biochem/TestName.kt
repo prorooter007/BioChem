@@ -56,6 +56,12 @@ class TestName : AppCompatActivity() {
             textView_4.setText(text_5)
         }
 
+        var text_6 = intent.getStringExtra("key_6")
+
+        if (text_6 != null){
+            textView_4.setText(text_6)
+        }
+
 
         val buttonSecondActivity: Button = findViewById(
             R.id.button6

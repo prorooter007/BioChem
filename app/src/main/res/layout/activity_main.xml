@@ -60,22 +60,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="103dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="564dp"
-        android:text="Next"
-        android:textAlignment="center"
-        android:textColor="#0E0E0E"
-        android:textSize="20sp"
-        android:visibility="visible"
-        app:backgroundTint="#41F8F7F7"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/editTextTextPersonName23"
         android:layout_width="0dp"

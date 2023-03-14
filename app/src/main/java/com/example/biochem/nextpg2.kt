@@ -15,7 +15,7 @@ class nextpg2 : AppCompatActivity() {
         )
         buttonMainActivit.setOnClickListener {
             val mainActivityIntent = Intent(
-                applicationContext, SelectCam::class.java
+                applicationContext, TestName::class.java
             )
             startActivity(mainActivityIntent)
         }

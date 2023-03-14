@@ -28,9 +28,6 @@
             android:name=".TestName"
             android:exported="false" />
         <activity
-            android:name=".SelectCam"
-            android:exported="false" />
-        <activity
             android:name=".nextpg2"
             android:exported="false" />
         <activity

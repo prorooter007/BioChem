@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val buttonMainActivit: Button = findViewById(
-            R.id.button5
+            R.id.button
         )
         buttonMainActivit.setOnClickListener {
             val mainActivityIntent = Intent(

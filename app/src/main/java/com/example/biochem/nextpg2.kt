@@ -25,7 +25,7 @@ class nextpg2 : AppCompatActivity() {
             val mainActivityIntent = Intent(
                 applicationContext, TestName::class.java
             )
-            mainActivityIntent.putExtra("key_1", value_1)
+            mainActivityIntent.putExtra("test", value_1)
             startActivity(mainActivityIntent)
 
 
@@ -39,7 +39,7 @@ class nextpg2 : AppCompatActivity() {
             val mainActivityIntent = Intent(
                 applicationContext, TestName::class.java
             )
-            mainActivityIntent.putExtra("key_2", value_2)
+            mainActivityIntent.putExtra("test", value_2)
             startActivity(mainActivityIntent)
         }
 
@@ -51,7 +51,7 @@ class nextpg2 : AppCompatActivity() {
             val mainActivityIntent = Intent(
                 applicationContext, TestName::class.java
             )
-            mainActivityIntent.putExtra("key_3", value_3)
+            mainActivityIntent.putExtra("test", value_3)
             startActivity(mainActivityIntent)
         }
 
@@ -63,7 +63,7 @@ class nextpg2 : AppCompatActivity() {
             val mainActivityIntent = Intent(
                 applicationContext, TestName::class.java
             )
-            mainActivityIntent.putExtra("key_4", value_4)
+            mainActivityIntent.putExtra("test", value_4)
             startActivity(mainActivityIntent)
         }
 
@@ -74,7 +74,7 @@ class nextpg2 : AppCompatActivity() {
             val mainActivityIntent = Intent(
                 applicationContext, TestName::class.java
             )
-            mainActivityIntent.putExtra("key_5", value_5)
+            mainActivityIntent.putExtra("test", value_5)
             startActivity(mainActivityIntent)
         }
 
@@ -85,7 +85,7 @@ class nextpg2 : AppCompatActivity() {
             val mainActivityIntent = Intent(
                 applicationContext, TestName::class.java
             )
-            mainActivityIntent.putExtra("key_6", value_6)
+            mainActivityIntent.putExtra("test", value_6)
             startActivity(mainActivityIntent)
         }
     }

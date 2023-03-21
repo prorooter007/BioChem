@@ -24,43 +24,46 @@ class TestName : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test_name)
 
-
+        var text = intent.getStringExtra("test")
         val  textView_4 = findViewById<TextView>(R.id.textView4)
-        var text = intent.getStringExtra("key_1")
+        textView_4.setText(text)
 
-        if (text != null){
-            textView_4.setText(text)
-        }
-
-        var text_2 = intent.getStringExtra("key_2")
-
-        if (text_2 != null){
-            textView_4.setText(text_2)
-        }
-
-        var text_3 = intent.getStringExtra("key_3")
-
-        if (text_3 != null){
-            textView_4.setText(text_3)
-        }
-
-        var text_4 = intent.getStringExtra("key_4")
-
-        if (text_4 != null){
-            textView_4.setText(text_4)
-        }
-
-        var text_5 = intent.getStringExtra("key_5")
-
-        if (text_5 != null){
-            textView_4.setText(text_5)
-        }
-
-        var text_6 = intent.getStringExtra("key_6")
-
-        if (text_6 != null){
-            textView_4.setText(text_6)
-        }
+//
+//        var text = intent.getStringExtra("key_1")
+//
+//        if (text != null){
+//            textView_4.setText(text)
+//        }
+//
+//        var text_2 = intent.getStringExtra("key_2")
+//
+//        if (text_2 != null){
+//            textView_4.setText(text_2)
+//        }
+//
+//        var text_3 = intent.getStringExtra("key_3")
+//
+//        if (text_3 != null){
+//            textView_4.setText(text_3)
+//        }
+//
+//        var text_4 = intent.getStringExtra("key_4")
+//
+//        if (text_4 != null){
+//            textView_4.setText(text_4)
+//        }
+//
+//        var text_5 = intent.getStringExtra("key_5")
+//
+//        if (text_5 != null){
+//            textView_4.setText(text_5)
+//        }
+//
+//        var text_6 = intent.getStringExtra("key_6")
+//
+//        if (text_6 != null){
+//            textView_4.setText(text_6)
+//        }
 
 
         val buttonSecondActivity: Button = findViewById(
@@ -70,6 +73,7 @@ class TestName : AppCompatActivity() {
             val secondActivityIntent = Intent(
                 applicationContext, TestName2::class.java
             )
+            secondActivityIntent.putExtra("test", text)
             startActivity(secondActivityIntent)
         }
 

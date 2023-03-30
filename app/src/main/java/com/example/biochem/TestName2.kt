@@ -67,8 +67,26 @@ class TestName2 : AppCompatActivity() {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
             saveImageToGallery(this, imageBitmap, "Biochem Image", "Biochem Image saved to Gallery")
+
+            // Get the width and height of the bitmap
+            val width = imageBitmap.width
+            val height = imageBitmap.height
+
+            // Create a 3D matrix to store the RGB values
+            val rgbMatrix = Array(width) { Array(height) { IntArray(3) } }
+
+            // Loop through the pixels of the bitmap and save the RGB values into the matrix
+            for (x in 0 until width) {
+                for (y in 0 until height) {
+                    val pixel = imageBitmap.getPixel(x, y)
+                    rgbMatrix[x][y][0] = (pixel shr 16) and 0xFF // red value
+                    rgbMatrix[x][y][1] = (pixel shr 8) and 0xFF // green value
+                    rgbMatrix[x][y][2] = pixel and 0xFF // blue value
+                }
+            }
         }
     }
+
 
     private fun saveImageToGallery(context: Context, image: Bitmap, title: String, description: String) {
         val imageUri: Uri?

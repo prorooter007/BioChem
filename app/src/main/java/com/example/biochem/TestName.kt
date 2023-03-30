@@ -71,10 +71,20 @@ class TestName : AppCompatActivity() {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE) {
-            /**save to Image In layout*/
-            val images: Bitmap = data?.extras?.get("data") as Bitmap
-            imageView.setImageBitmap(images)
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            val imageBitmap = data?.extras?.get("data") as Bitmap
+            val savedImageURL = MediaStore.Images.Media.insertImage(
+                contentResolver,
+                imageBitmap,
+                "Image Title",
+                "Image Description"
+            )
+            if (savedImageURL != null) {
+                Toast.makeText(this, "Image saved to gallery", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Failed to save image", Toast.LENGTH_LONG).show()
+            }
+            imageView.setImageBitmap(imageBitmap)
         }
     }
     /** ok now run it*/

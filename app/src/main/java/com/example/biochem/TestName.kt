@@ -69,6 +69,7 @@ class TestName : AppCompatActivity() {
             startActivityForResult(cameraInt, REQUEST_IMAGE_CAPTURE)
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -85,8 +86,22 @@ class TestName : AppCompatActivity() {
                 Toast.makeText(this, "Failed to save image", Toast.LENGTH_LONG).show()
             }
             imageView.setImageBitmap(imageBitmap)
+
+            val imageWidth = imageBitmap.width
+            val imageHeight = imageBitmap.height
+            val rgbValues = Array(imageHeight) { Array(imageWidth) { IntArray(3) } }
+
+            for (i in 0 until imageHeight) {
+                for (j in 0 until imageWidth) {
+                    val pixel = imageBitmap.getPixel(j, i)
+                    rgbValues[i][j][0] = (pixel shr 16) and 0xFF // red
+                    rgbValues[i][j][1] = (pixel shr 8) and 0xFF  // green
+                    rgbValues[i][j][2] = pixel and 0xFF         // blue
+                }
+            }
         }
     }
-    /** ok now run it*/
-
 }
+            // Now you can use the rgbValues variable as a 3D matrix to access the RGB values
+            // for each pixel in the captured image.
+    /** ok now run it*/

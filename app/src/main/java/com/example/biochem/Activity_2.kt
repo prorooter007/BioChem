@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 
-class nextpg2 : AppCompatActivity() {
+class Activity_2 : AppCompatActivity() {
 
     var value_1 = "URIC ACID TEST";
     var value_2 = "BILIRUBIN TEST";
@@ -16,14 +16,14 @@ class nextpg2 : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_nextpg2)
+        setContentView(R.layout.activity_2)
 
         val buttonMainActivit: Button = findViewById(
             R.id.button7
         )
         buttonMainActivit.setOnClickListener {
             val mainActivityIntent = Intent(
-                applicationContext, TestName::class.java
+                applicationContext, Activity_3::class.java
             )
             mainActivityIntent.putExtra("test", value_1)
             startActivity(mainActivityIntent)
@@ -37,7 +37,7 @@ class nextpg2 : AppCompatActivity() {
         )
         buttonMainActivit2.setOnClickListener {
             val mainActivityIntent = Intent(
-                applicationContext, TestName::class.java
+                applicationContext, Activity_3::class.java
             )
             mainActivityIntent.putExtra("test", value_2)
             startActivity(mainActivityIntent)
@@ -49,7 +49,7 @@ class nextpg2 : AppCompatActivity() {
         )
         buttonMainActivit3.setOnClickListener {
             val mainActivityIntent = Intent(
-                applicationContext, TestName::class.java
+                applicationContext, Activity_3::class.java
             )
             mainActivityIntent.putExtra("test", value_3)
             startActivity(mainActivityIntent)
@@ -61,7 +61,7 @@ class nextpg2 : AppCompatActivity() {
         )
         buttonMainActivit4.setOnClickListener {
             val mainActivityIntent = Intent(
-                applicationContext, TestName::class.java
+                applicationContext, Activity_3::class.java
             )
             mainActivityIntent.putExtra("test", value_4)
             startActivity(mainActivityIntent)
@@ -72,7 +72,7 @@ class nextpg2 : AppCompatActivity() {
         )
         buttonMainActivit5.setOnClickListener {
             val mainActivityIntent = Intent(
-                applicationContext, TestName::class.java
+                applicationContext, Activity_3::class.java
             )
             mainActivityIntent.putExtra("test", value_5)
             startActivity(mainActivityIntent)
@@ -83,7 +83,7 @@ class nextpg2 : AppCompatActivity() {
         )
         buttonMainActivit6.setOnClickListener {
             val mainActivityIntent = Intent(
-                applicationContext, TestName::class.java
+                applicationContext, Activity_3::class.java
             )
             mainActivityIntent.putExtra("test", value_6)
             startActivity(mainActivityIntent)

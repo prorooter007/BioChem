@@ -1,7 +1,6 @@
 package com.example.biochem
 
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -16,7 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 
-class TestName : AppCompatActivity() {
+class Activity_3 : AppCompatActivity() {
 
     lateinit var imageView: ImageView
     lateinit var button: Button
@@ -25,7 +24,7 @@ class TestName : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_test_name)
+        setContentView(R.layout.activity_3)
 
         var text = intent.getStringExtra("test")
         val textView_4 = findViewById<TextView>(R.id.textView4)
@@ -36,7 +35,7 @@ class TestName : AppCompatActivity() {
         )
         buttonSecondActivity.setOnClickListener {
             val secondActivityIntent = Intent(
-                applicationContext, TestName2::class.java
+                applicationContext, Activity_4::class.java
             )
             secondActivityIntent.putExtra("test", text)
             startActivity(secondActivityIntent)

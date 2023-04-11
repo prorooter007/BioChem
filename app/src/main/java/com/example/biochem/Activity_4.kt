@@ -15,14 +15,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 
-class TestName2 : AppCompatActivity() {
+class Activity_4 : AppCompatActivity() {
 
     lateinit var imageView: ImageView
     lateinit var button: Button
     val REQUEST_IMAGE_CAPTURE = 100
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_test_name2)
+        setContentView(R.layout.activity_4)
 
         var text = intent.getStringExtra("test")
 
@@ -31,7 +31,7 @@ class TestName2 : AppCompatActivity() {
         )
         buttonMainActivit.setOnClickListener {
             val mainActivityIntent = Intent(
-                applicationContext, result::class.java
+                applicationContext, Activity_5::class.java
             )
             startActivity(mainActivityIntent)
         }
@@ -41,7 +41,7 @@ class TestName2 : AppCompatActivity() {
         )
         buttonMainActivity.setOnClickListener {
             val mainActivityIntent = Intent(
-                applicationContext, TestName::class.java
+                applicationContext, Activity_3::class.java
             )
             startActivity(mainActivityIntent)
         }

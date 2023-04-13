@@ -48,19 +48,7 @@ class Activity_3 : AppCompatActivity() {
         var text = intent.getStringExtra("test")
         val  textView_4 = findViewById<TextView>(R.id.textView4)
         textView_4.setText(text)
-
-        val buttonSecondActivity: Button = findViewById(
-            R.id.button6
-        )
-        buttonSecondActivity.setOnClickListener {
-            val secondActivityIntent = Intent(
-                applicationContext, Activity_4::class.java
-            )
-            secondActivityIntent.putExtra("test", text)
-            startActivity(secondActivityIntent)
-        }
-
-
+        
         // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()
@@ -104,6 +92,11 @@ class Activity_3 : AppCompatActivity() {
         val nextButton = findViewById<Button>(R.id.button6)
         nextButton.setOnClickListener {
             // Add code to go to the next activity
+            val secondActivityIntent = Intent(
+                applicationContext, Activity_4::class.java
+            )
+
+            startActivity(secondActivityIntent)
         }
     }
 

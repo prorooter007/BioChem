@@ -1,25 +1,44 @@
 package com.example.biochem
 
-
+import android.Manifest
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.MediaStore
+import android.os.Environment
+import android.util.Log
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.*
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-
+import androidx.core.net.toUri
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class Activity_3 : AppCompatActivity() {
 
-    lateinit var imageView: ImageView
-    lateinit var button: Button
-    val REQUEST_IMAGE_CAPTURE = 1222
+    private var imageCapture: ImageCapture? = null
+    private lateinit var outputDirectory: File
+    private lateinit var cameraExecutor: ExecutorService
+    private lateinit var previewView: PreviewView
+    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+    private val REQUEST_CODE_PERMISSIONS = 10
+    private val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+
+
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            baseContext, it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +46,7 @@ class Activity_3 : AppCompatActivity() {
         setContentView(R.layout.activity_3)
 
         var text = intent.getStringExtra("test")
-        val textView_4 = findViewById<TextView>(R.id.textView4)
+        val  textView_4 = findViewById<TextView>(R.id.textView4)
         textView_4.setText(text)
 
         val buttonSecondActivity: Button = findViewById(
@@ -41,66 +60,118 @@ class Activity_3 : AppCompatActivity() {
             startActivity(secondActivityIntent)
         }
 
-        imageView = findViewById(R.id.imageView6)
-        button = findViewById(R.id.button7)
 
-        /**set camera Open*/
-        button.setOnClickListener {
-            val cameraInt = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(cameraInt, REQUEST_IMAGE_CAPTURE)
+        // Request camera permissions
+        if (allPermissionsGranted()) {
+            startCamera()
+        } else {
+            ActivityCompat.requestPermissions(
+                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            )
         }
 
-        imageView = findViewById(R.id.imageView6)
-        button = findViewById(R.id.button8)
+        fun getOutputDirectory(): File {
+            val mediaDir = externalMediaDirs.firstOrNull()?.let {
+                File(it, "CameraXApp").apply { mkdirs() }
+            }
+            return if (mediaDir != null && mediaDir.exists())
+                mediaDir else filesDir
+        }
 
-        /**get Permission*/
-        if (ContextCompat.checkSelfPermission(
-                applicationContext, android.Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_DENIED
-        )
-            ActivityCompat.requestPermissions(
-                this, arrayOf(android.Manifest.permission.CAMERA),
-                REQUEST_IMAGE_CAPTURE
-            )
-        /**set camera Open*/
-        button.setOnClickListener {
-            val cameraInt = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(cameraInt, REQUEST_IMAGE_CAPTURE)
+
+        // Set up the output directory for saving images
+        outputDirectory = getOutputDirectory()
+
+        // Set up the camera executor
+        cameraExecutor = Executors.newSingleThreadExecutor()
+
+        // Set up the preview view
+        previewView = findViewById(R.id.imageView6)
+
+        // Set up the "Standard" button
+        val standardButton = findViewById<Button>(R.id.button8)
+        standardButton.setOnClickListener {
+            takePhoto("Standard")
+        }
+
+        // Set up the "Reagent Blank" button
+        val blankButton = findViewById<Button>(R.id.button7)
+        blankButton.setOnClickListener {
+            takePhoto("Reagent Blank")
+        }
+
+        // Set up the "Next" button
+        val nextButton = findViewById<Button>(R.id.button6)
+        nextButton.setOnClickListener {
+            // Add code to go to the next activity
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-            val savedImageURL = MediaStore.Images.Media.insertImage(
-                contentResolver,
-                imageBitmap,
-                "Image Title",
-                "Image Description"
-            )
-            if (savedImageURL != null) {
-                Toast.makeText(this, "Image saved to gallery", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this, "Failed to save image", Toast.LENGTH_LONG).show()
-            }
-            imageView.setImageBitmap(imageBitmap)
+    private fun takePhoto(type: String) {
+        // Get a reference to the image capture use case
+        val imageCapture = imageCapture ?: return
 
-            val imageWidth = imageBitmap.width
-            val imageHeight = imageBitmap.height
-            val rgbValues = Array(imageHeight) { Array(imageWidth) { IntArray(3) } }
+        // Create a timestamped output file to hold the image
+        val photoFile = File(
+            outputDirectory,
+            SimpleDateFormat(
+                FILENAME_FORMAT,
+                Locale.US
+            ).format(System.currentTimeMillis()) + "_" + type + ".jpg"
+        )
 
-            for (i in 0 until imageHeight) {
-                for (j in 0 until imageWidth) {
-                    val pixel = imageBitmap.getPixel(j, i)
-                    rgbValues[i][j][0] = (pixel shr 16) and 0xFF // red
-                    rgbValues[i][j][1] = (pixel shr 8) and 0xFF  // green
-                    rgbValues[i][j][2] = pixel and 0xFF         // blue
+        // Set up the output options object which contains the file and metadata
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+
+        // Set up the image capture listener, which is triggered after photo has been taken
+        imageCapture.takePicture(
+            outputOptions,
+            ContextCompat.getMainExecutor(this),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    val savedUri = outputFileResults.savedUri ?: photoFile.toUri()
+                    Log.d(TAG, "Photo saved: $savedUri")
+                    Toast.makeText(this@Activity_3, "Photo saved", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onError(exception: ImageCaptureException) {
+                    val message = "Photo capture failed: ${exception.message}"
+                    Log.e(TAG, message, exception)
+                    Toast.makeText(this@Activity_3, message, Toast.LENGTH_SHORT).show()
                 }
             }
-        }
+        )
+    }
+
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+
+        cameraProviderFuture.addListener({
+            // Bind the preview and image capture use cases
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+            val preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(previewView.surfaceProvider)
+            }
+            imageCapture = ImageCapture.Builder()
+                .setTargetRotation(previewView.display.rotation)
+                .build()
+
+            // Select back camera as a default
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            try {
+                // Unbind any previous use cases before binding new ones
+                cameraProvider.unbindAll()
+
+                // Bind the camera to the lifecycle of this activity
+                cameraProvider.bindToLifecycle(
+                    this, cameraSelector, preview, imageCapture
+                )
+
+            } catch (exception: Exception) {
+                Log.e(TAG, "Error starting camera: ${exception.message}", exception)
+                Toast.makeText(this@Activity_3, "Error starting camera", Toast.LENGTH_SHORT).show()
+            }
+        }, ContextCompat.getMainExecutor(this))
     }
 }
-            // Now you can use the rgbValues variable as a 3D matrix to access the RGB values
-            // for each pixel in the captured image.
-    /** ok now run it*/

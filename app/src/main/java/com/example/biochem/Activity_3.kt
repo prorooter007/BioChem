@@ -5,13 +5,15 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.*
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
@@ -48,7 +50,7 @@ class Activity_3 : AppCompatActivity() {
         var text = intent.getStringExtra("test")
         val  textView_4 = findViewById<TextView>(R.id.textView4)
         textView_4.setText(text)
-        
+
         // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()

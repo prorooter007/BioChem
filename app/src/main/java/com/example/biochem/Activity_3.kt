@@ -97,7 +97,7 @@ class Activity_3 : AppCompatActivity() {
             val secondActivityIntent = Intent(
                 applicationContext, Activity_4::class.java
             )
-
+            secondActivityIntent.putExtra("test", text)
             startActivity(secondActivityIntent)
         }
     }

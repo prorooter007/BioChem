@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -127,6 +129,28 @@ class Activity_3 : AppCompatActivity() {
                     val savedUri = outputFileResults.savedUri ?: photoFile.toUri()
                     Log.d(TAG, "Photo saved: $savedUri")
                     Toast.makeText(this@Activity_3, "Photo saved", Toast.LENGTH_SHORT).show()
+
+                    // Get the Bitmap representation of the captured image
+                    val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
+
+                    // Get the dimensions of the Bitmap
+                    val width = bitmap.width
+                    val height = bitmap.height
+
+                    // Define a 3D matrix to hold the RGB values of the image
+                    val rgbValues = ByteArray(width * height * 3)
+
+                    // Loop through the pixels of the Bitmap and store the RGB values in the 3D matrix
+                    for (i in 0 until width) {
+                        for (j in 0 until height) {
+                            val pixel = bitmap.getPixel(i, j)
+                            rgbValues[(j * width + i) * 3] = Color.red(pixel).toByte() // Red
+                            rgbValues[(j * width + i) * 3 + 1] = Color.green(pixel).toByte() // Green
+                            rgbValues[(j * width + i) * 3 + 2] = Color.blue(pixel).toByte() // Blue
+                        }
+                    }
+
+                    // RGB values of the image stored in the 3D matrix
                 }
 
                 override fun onError(exception: ImageCaptureException) {
@@ -137,6 +161,7 @@ class Activity_3 : AppCompatActivity() {
             }
         )
     }
+
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)

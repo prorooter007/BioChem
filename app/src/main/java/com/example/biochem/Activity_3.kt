@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
@@ -22,6 +23,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import java.io.File
+import java.io.FileOutputStream
+import java.lang.StrictMath.min
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
@@ -133,24 +136,47 @@ class Activity_3 : AppCompatActivity() {
                     // Get the Bitmap representation of the captured image
                     val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
 
-                    // Get the dimensions of the Bitmap
-                    val width = bitmap.width
-                    val height = bitmap.height
+                    // Get the dimensions of the bitmap
+                    val bitmapWidth = bitmap.width
+                    val bitmapHeight = bitmap.height
 
-                    // Define a 3D matrix to hold the RGB values of the image
+                    // Calculate the coordinates for cropping the bitmap from the center
+                    val centerX = bitmapWidth / 2
+                    val centerY = bitmapHeight / 2
+                    val cropSize = 150
+                    val cropLeft = centerX - cropSize / 2
+                    val cropTop = centerY - cropSize / 2
+                    val cropRight = centerX + cropSize / 2
+                    val cropBottom = centerY + cropSize / 2
+
+                    // Crop the bitmap to 150x150 from the center
+                    val croppedBitmap = Bitmap.createBitmap(bitmap, cropLeft, cropTop, cropSize, cropSize)
+
+                    // Save the cropped bitmap to a file
+                    val croppedPhotoFile = File(
+                        outputDirectory,
+                        SimpleDateFormat(
+                            FILENAME_FORMAT,
+                            Locale.US
+                        ).format(System.currentTimeMillis()) + "_" + type + "_cropped.jpg"
+                    )
+                    val outputStream = FileOutputStream(croppedPhotoFile)
+                    croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                    outputStream.flush()
+                    outputStream.close()
+
+                    // RGB values of the image stored in the 3D matrix
+                    val width = croppedBitmap.width
+                    val height = croppedBitmap.height
                     val rgbValues = ByteArray(width * height * 3)
-
-                    // Loop through the pixels of the Bitmap and store the RGB values in the 3D matrix
                     for (i in 0 until width) {
                         for (j in 0 until height) {
-                            val pixel = bitmap.getPixel(i, j)
+                            val pixel = croppedBitmap.getPixel(i, j)
                             rgbValues[(j * width + i) * 3] = Color.red(pixel).toByte() // Red
                             rgbValues[(j * width + i) * 3 + 1] = Color.green(pixel).toByte() // Green
                             rgbValues[(j * width + i) * 3 + 2] = Color.blue(pixel).toByte() // Blue
                         }
                     }
-
-                    // RGB values of the image stored in the 3D matrix
                 }
 
                 override fun onError(exception: ImageCaptureException) {

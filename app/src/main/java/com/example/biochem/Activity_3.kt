@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -46,7 +47,6 @@ class Activity_3 : AppCompatActivity() {
             baseContext, it
         ) == PackageManager.PERMISSION_GRANTED
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,11 +107,9 @@ class Activity_3 : AppCompatActivity() {
         }
     }
 
-    private fun takePhoto(type: String) {
-        // Get a reference to the image capture use case
-        val imageCapture = imageCapture ?: return
 
-        // Create a timestamped output file to hold the image
+    private fun takePhoto(type: String) {
+        val imageCapture = imageCapture ?: return
         val photoFile = File(
             outputDirectory,
             SimpleDateFormat(
@@ -119,11 +117,7 @@ class Activity_3 : AppCompatActivity() {
                 Locale.US
             ).format(System.currentTimeMillis()) + "_" + type + ".jpg"
         )
-
-        // Set up the output options object which contains the file and metadata
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
-
-        // Set up the image capture listener, which is triggered after photo has been taken
         imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(this),
@@ -133,50 +127,55 @@ class Activity_3 : AppCompatActivity() {
                     Log.d(TAG, "Photo saved: $savedUri")
                     Toast.makeText(this@Activity_3, "Photo saved", Toast.LENGTH_SHORT).show()
 
-                    // Get the Bitmap representation of the captured image
                     val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
-
-                    // Get the dimensions of the bitmap
                     val bitmapWidth = bitmap.width
                     val bitmapHeight = bitmap.height
 
-                    // Calculate the coordinates for cropping the bitmap from the center
-                    val centerX = bitmapWidth / 2
-                    val centerY = bitmapHeight / 2
-                    val cropSize = 150
-                    val cropLeft = centerX - cropSize / 2
-                    val cropTop = centerY - cropSize / 2
-                    val cropRight = centerX + cropSize / 2
-                    val cropBottom = centerY + cropSize / 2
+                    val cropSeekBar = findViewById<SeekBar>(R.id.seekBar)
+                    cropSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                            val cropSize = progress
+                            val centerX = bitmapWidth / 2
+                            val centerY = bitmapHeight / 2
+                            val cropLeft = centerX - cropSize / 2
+                            val cropTop = centerY - cropSize / 2
+                            val cropRight = centerX + cropSize / 2
+                            val cropBottom = centerY + cropSize / 2
+                            val croppedBitmap = Bitmap.createBitmap(bitmap, cropLeft, cropTop, cropSize, cropSize)
+                            val croppedPhotoFile = File(
+                                outputDirectory,
+                                SimpleDateFormat(
+                                    FILENAME_FORMAT,
+                                    Locale.US
+                                ).format(System.currentTimeMillis()) + "_" + type + "_cropped.jpg"
+                            )
+                            val outputStream = FileOutputStream(croppedPhotoFile)
+                            croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                            outputStream.flush()
+                            outputStream.close()
 
-                    // Crop the bitmap to 150x150 from the center
-                    val croppedBitmap = Bitmap.createBitmap(bitmap, cropLeft, cropTop, cropSize, cropSize)
+                            // RGB values of the image stored in the 3D matrix
+                            val width = croppedBitmap.width
+                            val height = croppedBitmap.height
+                            val rgbValues = ByteArray(width * height * 3)
+                            for (i in 0 until width) {
+                                for (j in 0 until height) {
+                                    val pixel = croppedBitmap.getPixel(i, j)
+                                    rgbValues[(j * width + i) * 3] = Color.red(pixel).toByte() // Red
+                                    rgbValues[(j * width + i) * 3 + 1] = Color.green(pixel).toByte() // Green
+                                    rgbValues[(j * width + i) * 3 + 2] = Color.blue(pixel).toByte() // Blue
+                                }
+                            }
+                        }
 
-                    // Save the cropped bitmap to a file
-                    val croppedPhotoFile = File(
-                        outputDirectory,
-                        SimpleDateFormat(
-                            FILENAME_FORMAT,
-                            Locale.US
-                        ).format(System.currentTimeMillis()) + "_" + type + "_cropped.jpg"
-                    )
-                    val outputStream = FileOutputStream(croppedPhotoFile)
-                    croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                    outputStream.flush()
-                    outputStream.close()
+                        override fun onStartTrackingTouch(seekBar: SeekBar) {}
+
+                        override fun onStopTrackingTouch(seekBar: SeekBar) {}
+                    })
+
 
                     // RGB values of the image stored in the 3D matrix
-                    val width = croppedBitmap.width
-                    val height = croppedBitmap.height
-                    val rgbValues = ByteArray(width * height * 3)
-                    for (i in 0 until width) {
-                        for (j in 0 until height) {
-                            val pixel = croppedBitmap.getPixel(i, j)
-                            rgbValues[(j * width + i) * 3] = Color.red(pixel).toByte() // Red
-                            rgbValues[(j * width + i) * 3 + 1] = Color.green(pixel).toByte() // Green
-                            rgbValues[(j * width + i) * 3 + 2] = Color.blue(pixel).toByte() // Blue
-                        }
-                    }
+
                 }
 
                 override fun onError(exception: ImageCaptureException) {

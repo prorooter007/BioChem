@@ -28,9 +28,6 @@
             android:name=".Activity_3"
             android:exported="false" />
         <activity
-            android:name=".Activity_2"
-            android:exported="false" />
-        <activity
             android:name=".Activity_1"
             android:exported="true" >
             <intent-filter>

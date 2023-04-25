@@ -8,18 +8,55 @@
     tools:context=".Activity_1">
 
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="280dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="152dp"
-        android:text="Test"
-        android:textColor="#0E0E0E"
-        android:textSize="20sp"
-        app:backgroundTint="#41F8F7F7"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--    <Button-->
+    <!--        android:id="@+id/button"-->
+    <!--        android:layout_width="280dp"-->
+    <!--        android:layout_height="70dp"-->
+    <!--        android:layout_marginTop="152dp"-->
+    <!--        android:text="Test"-->
+    <!--        android:textColor="#0E0E0E"-->
+    <!--        android:textSize="20sp"-->
+    <!--        app:backgroundTint="#41F8F7F7"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--    <com.google.android.material.textfield.TextInputLayout-->
+    <!--        android:id="@+id/textInputLayout"-->
+    <!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="16dp"-->
+    <!--        android:layout_marginStart="16dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:layout_marginBottom="25dp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName2"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent">-->
+
+
+    <!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+
+    <!--    <com.google.android.material.textfield.TextInputLayout-->
+    <!--        android:id="@+id/textInputLayout"-->
+    <!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"-->
+    <!--        android:layout_width="280dp"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_margin="152dp"-->
+    <!--        android:layout_marginBottom="34dp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName2"-->
+    <!--        app:layout_constraintStart_toStartOf="@+id/editTextTextPersonName23"-->
+    <!--        app:layout_constraintTop_toTopOf="parent">-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/imageView2"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:scaleType="fitXY"-->
+    <!--            android:src="@drawable/lab" />-->
+    <!--    </com.google.android.material.textfield.TextInputLayout>-->
 
     <Button
         android:id="@+id/button2"
@@ -63,8 +100,8 @@
     <EditText
         android:id="@+id/editTextTextPersonName23"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="34dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="519dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="BioChem"
@@ -73,40 +110,69 @@
         android:textColorHighlight="#9C27B0"
         android:textColorLink="#9C27B0"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/lab" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName2"
-        android:layout_width="404dp"
-        android:layout_height="68dp"
-        android:layout_marginTop="34dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="BioChem"
-        android:textAlignment="center"
-        android:textColor="#0E0E0E"
-        android:textColorHighlight="#9C27B0"
-        android:textColorLink="#9C27B0"
-        android:textSize="30sp"
-        app:backgroundTint="#41F8F7F7"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--    <EditText-->
+    <!--        android:id="@+id/editTextTextPersonName2"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_marginStart="3dp"-->
+    <!--        android:layout_marginEnd="3dp"-->
+    <!--        android:layout_marginBottom="530dp"-->
+    <!--        android:ems="10"-->
+    <!--        android:inputType="textPersonName"-->
+    <!--        android:text="BioChem"-->
+    <!--        android:textAlignment="center"-->
+    <!--        android:textColor="#0E0E0E"-->
+    <!--        android:textColorHighlight="#9C27B0"-->
+    <!--        android:textColorLink="#9C27B0"-->
+    <!--        android:textSize="30sp"-->
+    <!--        app:backgroundTint="#41F8F7F7"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_height="match_parent"
+        android:hint="@string/select"
+        >
+
+        <AutoCompleteTextView
+            android:id="@+id/drop_down_main"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="140dp"
+            android:backgroundTintMode="screen"
+            android:inputType="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

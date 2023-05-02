@@ -10,7 +10,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
@@ -24,7 +23,6 @@ import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.core.view.setPadding
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.StrictMath.min
@@ -43,10 +41,6 @@ class Activity_3 : AppCompatActivity() {
     private val REQUEST_CODE_PERMISSIONS = 10
     private val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
 
-    private lateinit var cropbox: ImageView
-    private lateinit var cropSeekBar: SeekBar
-
-    var seekBarProgress = 0
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
@@ -85,31 +79,6 @@ class Activity_3 : AppCompatActivity() {
 
         // Set up the camera executor
         cameraExecutor = Executors.newSingleThreadExecutor()
-
-        // object of cropbox
-        cropbox = findViewById<ImageView>(R.id.imageView_box)
-
-        //object of seekbar
-        cropSeekBar = findViewById<SeekBar>(R.id.seekBar)
-
-        cropSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-
-                seekBarProgress = progress
-                cropbox.setPadding(progress)
-
-//                Log.e("Scale", progress.toString())
-            }
-
-            override fun onStartTrackingTouch(SeekBar: SeekBar) {
-//                Log.e("Scale", progressVal.toString())
-            }
-
-            override fun onStopTrackingTouch(Seekbar: SeekBar) {
-//                Log.e("Scale", progressVal.toString())
-            }
-        })
 
         // Set up the preview view
         previewView = findViewById(R.id.imageView6)
@@ -162,86 +131,47 @@ class Activity_3 : AppCompatActivity() {
                     val bitmapWidth = bitmap.width
                     val bitmapHeight = bitmap.height
 
-                    //////////////////////////////////////////////////////
-                    val cropSize = seekBarProgress
-                    val centerX = bitmapWidth / 2
-                    val centerY = bitmapHeight / 2
-                    val cropLeft = centerX - cropSize / 2
-                    val cropTop = centerY - cropSize / 2
-                    val cropRight = centerX + cropSize / 2
-                    val cropBottom = centerY + cropSize / 2
-                    val croppedBitmap = Bitmap.createBitmap(bitmap, cropLeft, cropTop, cropSize, cropSize)
-                    val croppedPhotoFile = File(
-                        outputDirectory,
-                        SimpleDateFormat(
-                            FILENAME_FORMAT,
-                            Locale.US
-                        ).format(System.currentTimeMillis()) + "_" + type + "_cropped.jpg"
-                    )
-                    val outputStream = FileOutputStream(croppedPhotoFile)
-                    croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                    outputStream.flush()
-                    outputStream.close()
+                    val cropSeekBar = findViewById<SeekBar>(R.id.seekBar)
+                    cropSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                            val cropSize = progress
+                            val centerX = bitmapWidth / 2
+                            val centerY = bitmapHeight / 2
+                            val cropLeft = centerX - cropSize / 2
+                            val cropTop = centerY - cropSize / 2
+                            val cropRight = centerX + cropSize / 2
+                            val cropBottom = centerY + cropSize / 2
+                            val croppedBitmap = Bitmap.createBitmap(bitmap, cropLeft, cropTop, cropSize, cropSize)
+                            val croppedPhotoFile = File(
+                                outputDirectory,
+                                SimpleDateFormat(
+                                    FILENAME_FORMAT,
+                                    Locale.US
+                                ).format(System.currentTimeMillis()) + "_" + type + "_cropped.jpg"
+                            )
+                            val outputStream = FileOutputStream(croppedPhotoFile)
+                            croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                            outputStream.flush()
+                            outputStream.close()
 
-                    // RGB values of the image stored in the 3D matrix
-                    val width = croppedBitmap.width
-                    val height = croppedBitmap.height
-                    val rgbValues = ByteArray(width * height * 3)
-                    for (i in 0 until width) {
-                        for (j in 0 until height) {
-                            val pixel = croppedBitmap.getPixel(i, j)
-                            rgbValues[(j * width + i) * 3] = Color.red(pixel).toByte() // Red
-                            rgbValues[(j * width + i) * 3 + 1] = Color.green(pixel).toByte() // Green
-                            rgbValues[(j * width + i) * 3 + 2] = Color.blue(pixel).toByte() // Blue
+                            // RGB values of the image stored in the 3D matrix
+                            val width = croppedBitmap.width
+                            val height = croppedBitmap.height
+                            val rgbValues = ByteArray(width * height * 3)
+                            for (i in 0 until width) {
+                                for (j in 0 until height) {
+                                    val pixel = croppedBitmap.getPixel(i, j)
+                                    rgbValues[(j * width + i) * 3] = Color.red(pixel).toByte() // Red
+                                    rgbValues[(j * width + i) * 3 + 1] = Color.green(pixel).toByte() // Green
+                                    rgbValues[(j * width + i) * 3 + 2] = Color.blue(pixel).toByte() // Blue
+                                }
+                            }
                         }
-                    }
-                    /////////////////////////////////////////////////////
 
-//                    cropSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-//                        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-//
-////                            cropbox.scaleX = progress
-////                            cropbox.scaleY = progress
-////                            Log.e("Scale", "progress.toString()")
-////                            Toast.makeText(this@Activity_3, progress.toString(), Toast.LENGTH_SHORT).show()
-//                            val cropSize = progress
-//                            val centerX = bitmapWidth / 2
-//                            val centerY = bitmapHeight / 2
-//                            val cropLeft = centerX - cropSize / 2
-//                            val cropTop = centerY - cropSize / 2
-//                            val cropRight = centerX + cropSize / 2
-//                            val cropBottom = centerY + cropSize / 2
-//                            val croppedBitmap = Bitmap.createBitmap(bitmap, cropLeft, cropTop, cropSize, cropSize)
-//                            val croppedPhotoFile = File(
-//                                outputDirectory,
-//                                SimpleDateFormat(
-//                                    FILENAME_FORMAT,
-//                                    Locale.US
-//                                ).format(System.currentTimeMillis()) + "_" + type + "_cropped.jpg"
-//                            )
-//                            val outputStream = FileOutputStream(croppedPhotoFile)
-//                            croppedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-//                            outputStream.flush()
-//                            outputStream.close()
-//
-//                            // RGB values of the image stored in the 3D matrix
-//                            val width = croppedBitmap.width
-//                            val height = croppedBitmap.height
-//                            val rgbValues = ByteArray(width * height * 3)
-//                            for (i in 0 until width) {
-//                                for (j in 0 until height) {
-//                                    val pixel = croppedBitmap.getPixel(i, j)
-//                                    rgbValues[(j * width + i) * 3] = Color.red(pixel).toByte() // Red
-//                                    rgbValues[(j * width + i) * 3 + 1] = Color.green(pixel).toByte() // Green
-//                                    rgbValues[(j * width + i) * 3 + 2] = Color.blue(pixel).toByte() // Blue
-//                                }
-//                            }
-//                        }
-//
-//                        override fun onStartTrackingTouch(seekBar: SeekBar) {}
-//
-//                        override fun onStopTrackingTouch(seekBar: SeekBar) {}
-//                    })
+                        override fun onStartTrackingTouch(seekBar: SeekBar) {}
+
+                        override fun onStopTrackingTouch(seekBar: SeekBar) {}
+                    })
 
 
                     // RGB values of the image stored in the 3D matrix

@@ -14,10 +14,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
@@ -31,6 +28,7 @@ import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+
 class Activity_3 : AppCompatActivity() {
 
     private var imageCapture: ImageCapture? = null
@@ -40,6 +38,7 @@ class Activity_3 : AppCompatActivity() {
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     private val REQUEST_CODE_PERMISSIONS = 10
     private val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+    private var camera: Camera? = null
 
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -105,7 +104,9 @@ class Activity_3 : AppCompatActivity() {
             secondActivityIntent.putExtra("test", text)
             startActivity(secondActivityIntent)
         }
+
     }
+
 
 
     private fun takePhoto(type: String) {
@@ -173,7 +174,6 @@ class Activity_3 : AppCompatActivity() {
                         override fun onStopTrackingTouch(seekBar: SeekBar) {}
                     })
 
-
                     // RGB values of the image stored in the 3D matrix
 
                 }
@@ -204,19 +204,47 @@ class Activity_3 : AppCompatActivity() {
             // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-            try {
-                // Unbind any previous use cases before binding new ones
-                cameraProvider.unbindAll()
+            // Set up the camera control
+            val cameraControl = cameraProvider.bindToLifecycle(
+                this, cameraSelector, preview, imageCapture
+            ).cameraControl
 
-                // Bind the camera to the lifecycle of this activity
-                cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture
-                )
 
-            } catch (exception: Exception) {
-                Log.e(TAG, "Error starting camera: ${exception.message}", exception)
-                Toast.makeText(this@Activity_3, "Error starting camera", Toast.LENGTH_SHORT).show()
-            }
+            // Bind the camera to the lifecycle
+            val camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+
+            // Get the camera info
+            val cameraInfo = camera.cameraInfo
+
+            // Set up the zoom slider
+            //val cameraInfo = cameraProvider.getCameraInfo(cameraSelector)
+            val zoomSeekBar = findViewById<SeekBar>(R.id.seekBar)
+            zoomSeekBar.max = cameraInfo.zoomState.value?.maxZoomRatio?.times(10)?.toInt() ?: 0
+            zoomSeekBar.progress = 0
+            zoomSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    val zoomRatio = progress.toFloat() / 10f
+                    cameraControl.setZoomRatio(zoomRatio)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+
+//            try {
+//                // Unbind any previous use cases before binding new ones
+//                cameraProvider.unbindAll()
+//
+//                // Bind the camera to the lifecycle of this activity
+//                cameraProvider.bindToLifecycle(
+//                    this, cameraSelector, preview, imageCapture
+//                )
+//
+//            } catch (exception: Exception) {
+//                Log.e(TAG, "Error starting camera: ${exception.message}", exception)
+//                Toast.makeText(this@Activity_3, "Error starting camera", Toast.LENGTH_SHORT).show()
+//            }
         }, ContextCompat.getMainExecutor(this))
     }
 }

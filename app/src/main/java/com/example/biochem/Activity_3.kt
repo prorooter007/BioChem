@@ -81,18 +81,7 @@ class Activity_3 : AppCompatActivity() {
 
         // Set up the preview view
         previewView = findViewById(R.id.imageView6)
-
-        // Set up the "Standard" button
-        val standardButton = findViewById<Button>(R.id.button8)
-        standardButton.setOnClickListener {
-            takePhoto("Standard")
-        }
-
-        // Set up the "Reagent Blank" button
-        val blankButton = findViewById<Button>(R.id.button7)
-        blankButton.setOnClickListener {
-            takePhoto("Reagent Blank")
-        }
+        
 
         // Set up the "Next" button
         val nextButton = findViewById<Button>(R.id.button6)
@@ -192,6 +181,19 @@ class Activity_3 : AppCompatActivity() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
         cameraProviderFuture.addListener({
+
+            // Set up the "Standard" button
+            val standardButton = findViewById<Button>(R.id.button8)
+            standardButton.setOnClickListener {
+                takePhoto("Standard")
+            }
+
+            // Set up the "Reagent Blank" button
+            val blankButton = findViewById<Button>(R.id.button7)
+            blankButton.setOnClickListener {
+                takePhoto("Reagent Blank")
+            }
+
             // Bind the preview and image capture use cases
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
             val preview = Preview.Builder().build().also {
@@ -232,19 +234,6 @@ class Activity_3 : AppCompatActivity() {
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {}
             })
 
-//            try {
-//                // Unbind any previous use cases before binding new ones
-//                cameraProvider.unbindAll()
-//
-//                // Bind the camera to the lifecycle of this activity
-//                cameraProvider.bindToLifecycle(
-//                    this, cameraSelector, preview, imageCapture
-//                )
-//
-//            } catch (exception: Exception) {
-//                Log.e(TAG, "Error starting camera: ${exception.message}", exception)
-//                Toast.makeText(this@Activity_3, "Error starting camera", Toast.LENGTH_SHORT).show()
-//            }
         }, ContextCompat.getMainExecutor(this))
     }
 }

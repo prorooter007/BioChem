@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.widget.Button
 import android.widget.SeekBar
@@ -54,7 +55,7 @@ class Activity_3 : AppCompatActivity() {
         var text = intent.getStringExtra("test")
         val  textView_4 = findViewById<TextView>(R.id.textView4)
         textView_4.setText(text)
-
+        
         // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()

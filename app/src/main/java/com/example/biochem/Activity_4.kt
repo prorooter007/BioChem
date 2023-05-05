@@ -13,15 +13,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
@@ -43,6 +37,7 @@ class Activity_4 : AppCompatActivity() {
     private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     private val REQUEST_CODE_PERMISSIONS = 10
     private val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+    private var camera: Camera? = null
 
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -77,7 +72,6 @@ class Activity_4 : AppCompatActivity() {
                 mediaDir else filesDir
         }
 
-
         // Set up the output directory for saving images
         outputDirectory = getOutputDirectory()
 
@@ -87,17 +81,6 @@ class Activity_4 : AppCompatActivity() {
         // Set up the preview view
         previewView = findViewById(R.id.imageView6_2)
 
-//        // Set up the "Standard" button
-//        val standardButton = findViewById<Button>(R.id.button8_2)
-//        standardButton.setOnClickListener {
-//            takePhoto("Standard")
-//        }
-
-        // Set up the "Reagent Blank" button
-        val blankButton = findViewById<Button>(R.id.button7_2)
-        blankButton.setOnClickListener {
-            takePhoto("Test")
-        }
 
         // Set up the "Back" button
         val backButton = findViewById<Button>(R.id.button6_2)
@@ -184,6 +167,13 @@ class Activity_4 : AppCompatActivity() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
         cameraProviderFuture.addListener({
+
+            // Set up the "Reagent Blank" button
+            val blankButton = findViewById<Button>(R.id.button7_2)
+            blankButton.setOnClickListener {
+                takePhoto("Test")
+            }
+
             // Bind the preview and image capture use cases
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
             val preview = Preview.Builder().build().also {
@@ -196,19 +186,33 @@ class Activity_4 : AppCompatActivity() {
             // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
-            try {
-                // Unbind any previous use cases before binding new ones
-                cameraProvider.unbindAll()
+            // Set up the camera control
+            val cameraControl = cameraProvider.bindToLifecycle(
+                this, cameraSelector, preview, imageCapture
+            ).cameraControl
 
-                // Bind the camera to the lifecycle of this activity
-                cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture
-                )
+            // Bind the camera to the lifecycle
+            val camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
 
-            } catch (exception: Exception) {
-                Log.e(ContentValues.TAG, "Error starting camera: ${exception.message}", exception)
-                Toast.makeText(this@Activity_4, "Error starting camera", Toast.LENGTH_SHORT).show()
-            }
+            // Get the camera info
+            val cameraInfo = camera.cameraInfo
+
+            // Set up the zoom slider
+            //val cameraInfo = cameraProvider.getCameraInfo(cameraSelector)
+            val zoomSeekBar = findViewById<SeekBar>(R.id.seekBar)
+            zoomSeekBar.max = cameraInfo.zoomState.value?.maxZoomRatio?.times(10)?.toInt() ?: 0
+            zoomSeekBar.progress = 0
+            zoomSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    val zoomRatio = progress.toFloat() / 10f
+                    cameraControl.setZoomRatio(zoomRatio)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+
         }, ContextCompat.getMainExecutor(this))
     }
 }

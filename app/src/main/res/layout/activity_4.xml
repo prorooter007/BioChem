@@ -89,15 +89,5 @@
 
   </androidx.camera.view.PreviewView>
 
-  <ImageView
-      android:id="@+id/imageView_box_2"
-      android:layout_width="85dp"
-      android:layout_height="82dp"
-      android:src="@drawable/cam_box"
-      app:layout_constraintBottom_toBottomOf="@+id/imageView6_2"
-      app:layout_constraintEnd_toEndOf="@+id/imageView6_2"
-      app:layout_constraintStart_toStartOf="@+id/imageView6_2"
-      app:layout_constraintTop_toTopOf="@+id/imageView6_2" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

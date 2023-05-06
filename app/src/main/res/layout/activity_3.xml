@@ -12,10 +12,10 @@
         android:id="@+id/button6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="79dp"
+        android:layout_marginTop="26dp"
         android:text="Next"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.817"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button8" />
 
@@ -23,25 +23,24 @@
         android:id="@+id/button7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="13dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginTop="19dp"
         android:text="Reagent Blank"
-        app:layout_constraintBaseline_toBaselineOf="@+id/button8"
-        app:layout_constraintEnd_toStartOf="@+id/button8"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
 
 
     <Button
         android:id="@+id/button8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="75dp"
+        android:layout_marginTop="19dp"
         android:text="Standard"
-        app:layout_constraintBottom_toTopOf="@+id/button6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button7"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+        app:layout_constraintHorizontal_bias="0.844"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -58,45 +57,65 @@
         android:id="@+id/textView4"
         android:layout_width="312dp"
         android:layout_height="74dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="37dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="37dp"
         android:text=""
         android:textColor="@color/black"
         android:textSize="32dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imageView6"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.068" />
 
     <androidx.camera.view.PreviewView
         android:id="@+id/imageView6"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginEnd="52dp"
-        android:layout_marginBottom="21dp"
+        android:layout_width="307dp"
+        android:layout_height="313dp"
         android:scaleType="fitCenter"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/button8"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.356"
         tools:ignore="MissingClass" />
 
     <SeekBar
         android:id="@+id/seekBar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="31dp"
         android:max="200"
         android:progress="150"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+
+    <Button
+        android:id="@+id/button_water"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:text="Water"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.154"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button7" />
+
+    <EditText
+        android:id="@+id/editText_y2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter y2"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView6" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

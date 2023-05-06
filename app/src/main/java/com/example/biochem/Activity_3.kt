@@ -10,10 +10,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
-import android.widget.Button
-import android.widget.SeekBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -24,6 +21,7 @@ import androidx.core.net.toUri
 import java.io.File
 import java.io.FileOutputStream
 import java.lang.StrictMath.min
+import java.lang.StrictMath.sqrt
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
@@ -40,6 +38,11 @@ class Activity_3 : AppCompatActivity() {
     private val REQUEST_CODE_PERMISSIONS = 10
     private val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
     private var camera: Camera? = null
+    public var  R_w = 0.0
+    public var  G_w = 0.0
+    public var  B_w = 0.0
+    public var A_b = 0.0
+    public var A_std = 0.0
 
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -98,7 +101,6 @@ class Activity_3 : AppCompatActivity() {
     }
 
 
-
     private fun takePhoto(type: String) {
         val imageCapture = imageCapture ?: return
         val photoFile = File(
@@ -124,18 +126,86 @@ class Activity_3 : AppCompatActivity() {
                     
                             // RGB values of the image stored in the 3D matrix
 
-                            val rgbValues = ByteArray(width * height * 3)
+                            val r = ByteArray(width * height * 3)
+                            val g = ByteArray(width * height * 3)
+                            val b = ByteArray(width * height * 3)
                             for (i in 0 until width) {
                                 for (j in 0 until height) {
                                     val pixel = bitmap.getPixel(i, j)
-                                    rgbValues[(j * width + i) * 3] = Color.red(pixel).toByte() // Red
-                                    rgbValues[(j * width + i) * 3 + 1] = Color.green(pixel).toByte() // Green
-                                    rgbValues[(j * width + i) * 3 + 2] = Color.blue(pixel).toByte() // Blue
+                                    r[(j * width + i) ] = Color.red(pixel).toByte() // Red
+                                    g[(j * width + i) ] = Color.green(pixel).toByte() // Green
+                                    b[(j * width + i) ] = Color.blue(pixel).toByte() // Blue
+
                                 }
                             }
 
-                    // RGB values of the image stored in the 3D matrix
+                    val s_r = 1
+                    val s_g = 1
+                    val s_b = 1
 
+                    val numArray_r = r
+                    var sum_r = 0.0
+
+                    for (num_r in numArray_r) {
+                        sum_r += num_r
+                    }
+
+                    val average_r = sum_r / numArray_r.size
+                   // println("The average is: %.2f".format(average_r))
+
+                    val numArray_g = g
+                    var sum_g = 0.0
+
+                    for (num_g in numArray_g) {
+                        sum_g += num_g
+                    }
+
+                    val average_g = sum_g / numArray_g.size
+                   // println("The average is: %.2f".format(average_g))
+
+
+                    val numArray_b = b
+                    var sum_b = 0.0
+
+                    for (num_b in numArray_b) {
+                        sum_b += num_b
+                    }
+
+                    val average_b = sum_b / numArray_b.size
+                   // println("The average is: %.2f".format(average_b))
+
+
+
+                    if (type == "Reagent Blank"){
+                        val  R_b = (average_r / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
+                        val  G_b = (average_g / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
+                        val  B_b = (average_b / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
+
+                        A_b =  (s_r*R_b +s_g*G_b+s_b*B_b)/(s_r*R_w +s_g*G_w+s_b*R_w)
+                    }
+                    else if(type == "Standard"){
+                        val  R_s = (average_r / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
+                        val  G_s = (average_g / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
+                        val  B_s = (average_b / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
+
+                         A_std = (s_r*R_s +s_g*G_s+s_b*B_s)/(s_r*R_w +s_g*G_w+s_b*R_w)
+                    }
+                    else if(type == "water"){
+                          R_w = (average_r / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
+                          G_w = (average_g / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
+                          B_w = (average_b / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
+                    }
+
+                    var x_1 = A_b
+                    var x_2 = A_std
+                    var y_1 =0.0
+                    val editText = findViewById<EditText>(R.id.editText_y2)
+                    val y_2 = editText.text.toString().toDouble()
+                    var m = (y_2 - y_1)/(x_2 - x_1)
+
+                    var c = y_2 - (m*x_2)
+
+                    // RGB values of the image stored in the 3D matrix
                 }
 
                 override fun onError(exception: ImageCaptureException) {
@@ -163,6 +233,12 @@ class Activity_3 : AppCompatActivity() {
             val blankButton = findViewById<Button>(R.id.button7)
             blankButton.setOnClickListener {
                 takePhoto("Reagent Blank")
+            }
+
+            // Set up the "Water" button
+            val waterButton = findViewById<Button>(R.id.button_water)
+            waterButton.setOnClickListener {
+                takePhoto("Water")
             }
 
             // Bind the preview and image capture use cases

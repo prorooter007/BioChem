@@ -38,6 +38,7 @@ class Activity_4 : AppCompatActivity() {
     private val REQUEST_CODE_PERMISSIONS = 10
     private val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
     private var camera: Camera? = null
+    public var A_t = 0.0
 
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -139,17 +140,72 @@ class Activity_4 : AppCompatActivity() {
                     val height = bitmap.height
 
                     // Define a 3D matrix to hold the RGB values of the image
-                    val rgbValues = ByteArray(width * height * 3)
+                    val r = ByteArray(width * height * 3)
+                    val g = ByteArray(width * height * 3)
+                    val b = ByteArray(width * height * 3)
 
                     // Loop through the pixels of the Bitmap and store the RGB values in the 3D matrix
                     for (i in 0 until width) {
                         for (j in 0 until height) {
                             val pixel = bitmap.getPixel(i, j)
-                            rgbValues[(j * width + i) * 3] = Color.red(pixel).toByte() // Red
-                            rgbValues[(j * width + i) * 3 + 1] = Color.green(pixel).toByte() // Green
-                            rgbValues[(j * width + i) * 3 + 2] = Color.blue(pixel).toByte() // Blue
+                            r[(j * width + i) ] = Color.red(pixel).toByte() // Red
+                            g[(j * width + i) ] = Color.green(pixel).toByte() // Green
+                            b[(j * width + i) ] = Color.blue(pixel).toByte() // Blue
                         }
                     }
+
+                    val s_r = 1
+                    val s_g = 1
+                    val s_b = 1
+                    val m = intent.getDoubleExtra("m", 0.0)
+                    val c = intent.getDoubleExtra("c", 0.0)
+                    val R_w = intent.getDoubleExtra("R_w", 0.0)
+                    val G_w = intent.getDoubleExtra("G_w", 0.0)
+                    val B_w = intent.getDoubleExtra("B_w", 0.0)
+
+                    val numArray_r = r
+                    var sum_r = 0.0
+
+                    for (num_r in numArray_r) {
+                        sum_r += num_r
+                    }
+
+                    val average_r = sum_r / numArray_r.size
+                    // println("The average is: %.2f".format(average_r))
+
+                    val numArray_g = g
+                    var sum_g = 0.0
+
+                    for (num_g in numArray_g) {
+                        sum_g += num_g
+                    }
+
+                    val average_g = sum_g / numArray_g.size
+                    // println("The average is: %.2f".format(average_g))
+
+
+                    val numArray_b = b
+                    var sum_b = 0.0
+
+                    for (num_b in numArray_b) {
+                        sum_b += num_b
+                    }
+
+                    val average_b = sum_b / numArray_b.size
+                    // println("The average is: %.2f".format(average_b))
+
+
+                    if (type == "Test"){
+                        val  R_t = (average_r / (StrictMath.sqrt((average_r * average_r) + (average_g * average_g) + (average_b * average_b))))
+                        val  G_t = (average_g / (StrictMath.sqrt((average_r * average_r) + (average_g * average_g) + (average_b * average_b))))
+                        val  B_t = (average_b / (StrictMath.sqrt((average_r * average_r) + (average_g * average_g) + (average_b * average_b))))
+
+                        A_t =  (s_r*R_t +s_g*G_t+s_b*B_t)/(s_r*R_w +s_g*G_w+s_b*B_w)
+                    }
+
+                    var x = A_t
+
+                    var y = m*x + c
 
                     // RGB values of the image stored in the 3D matrix
                 }

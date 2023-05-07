@@ -181,14 +181,14 @@ class Activity_3 : AppCompatActivity() {
                         val  G_b = (average_g / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
                         val  B_b = (average_b / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
 
-                        A_b =  (s_r*R_b +s_g*G_b+s_b*B_b)/(s_r*R_w +s_g*G_w+s_b*R_w)
+                        A_b =  (s_r*R_b +s_g*G_b+s_b*B_b)/(s_r*R_w +s_g*G_w+s_b*B_w)
                     }
                     else if(type == "Standard"){
                         val  R_s = (average_r / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
                         val  G_s = (average_g / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
                         val  B_s = (average_b / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
 
-                         A_std = (s_r*R_s +s_g*G_s+s_b*B_s)/(s_r*R_w +s_g*G_w+s_b*R_w)
+                         A_std = (s_r*R_s +s_g*G_s+s_b*B_s)/(s_r*R_w +s_g*G_w+s_b*B_w)
                     }
                     else if(type == "water"){
                           R_w = (average_r / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))

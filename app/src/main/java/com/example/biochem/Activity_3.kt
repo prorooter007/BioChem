@@ -27,7 +27,6 @@ import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-
 class Activity_3 : AppCompatActivity() {
 
     private var imageCapture: ImageCapture? = null
@@ -205,6 +204,27 @@ class Activity_3 : AppCompatActivity() {
 
                     var c = y_2 - (m*x_2)
 
+                    val intent_m = Intent(this@Activity_3, Activity_4::class.java)
+                    intent_m.putExtra("m", m)
+                    startActivity(intent_m)
+
+                    val intent_c = Intent(this@Activity_3, Activity_4::class.java)
+                    intent_c.putExtra("c", c)
+                    startActivity(intent_c)
+
+                    val intent_R_w = Intent(this@Activity_3, Activity_4::class.java)
+                    intent_R_w.putExtra("R_w", R_w)
+                    startActivity(intent_R_w)
+
+                    val intent_G_w = Intent(this@Activity_3, Activity_4::class.java)
+                    intent_G_w.putExtra("G_w", G_w)
+                    startActivity(intent_G_w)
+
+                    val intent_B_w = Intent(this@Activity_3, Activity_4::class.java)
+                    intent_B_w.putExtra("B_w", B_w)
+                    startActivity(intent_B_w)
+
+                    
                     // RGB values of the image stored in the 3D matrix
                 }
 

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">BioChem</string>
-    <string name="select">Dropdown Menu</string>
+    <string name="select">Select Test</string>
     <string name="item_label">Items</string>
     <string name="take_photo">TAKE PHOTO</string>
     <string name="permission_required">Permission Required</string>
@@ -8,4 +8,7 @@
     <string name="permission_warning">All permissions are required.</string>
     <string name="yes">Yes</string>
     <string name="select_test">Select Test</string>
+    <string name="result">Result</string>
+    <string name="settings">Settings</string>
+    <string name="calibration">Calibration</string>
 </resources>

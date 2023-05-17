@@ -33,7 +33,7 @@ class Activity_1 : AppCompatActivity() {
 
         autoComplete.setOnClickListener {
 //            val mainActivityIntent = Intent(
-//                applicationContext, TestName::class.java
+//                applicationContext, Activity_3::class.java
 //            )
 //            mainActivityIntent.putStringArrayListExtra("test", items)
 //            startActivity(mainActivityIntent)

@@ -39,7 +39,8 @@ class Activity_4 : AppCompatActivity() {
     private val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
     private var camera: Camera? = null
     public var A_t = 0.0
-
+    var m = 0.0
+    var c = 0.0
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
@@ -51,6 +52,12 @@ class Activity_4 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_4)
+
+
+        m = intent.getDoubleExtra("m", 0.0)
+        c = intent.getDoubleExtra("c", 0.0)
+
+        Toast.makeText(applicationContext, m.toString() +" " +c.toString(), Toast.LENGTH_SHORT).show()
 
         var text = intent.getStringExtra("test")
         val  textView_42 = findViewById<TextView>(R.id.textView4_2)
@@ -157,8 +164,6 @@ class Activity_4 : AppCompatActivity() {
                     val s_r = 1
                     val s_g = 1
                     val s_b = 1
-                    val m = intent.getDoubleExtra("m", 0.0)
-                    val c = intent.getDoubleExtra("c", 0.0)
                     val R_w = intent.getDoubleExtra("R_w", 0.0)
                     val G_w = intent.getDoubleExtra("G_w", 0.0)
                     val B_w = intent.getDoubleExtra("B_w", 0.0)
@@ -204,8 +209,11 @@ class Activity_4 : AppCompatActivity() {
                     }
 
                     var x = A_t
-
-                    var y = m*x + c
+                    Log.e("M, C", m.toString() +" " +c.toString())
+                    var y = m * x + c
+                    val intent_y = Intent(this@Activity_4, Activity_5::class.java)
+                    intent_y.putExtra("y", y)
+                    startActivity(intent_y)
 
                     // RGB values of the image stored in the 3D matrix
                 }

@@ -44,6 +44,7 @@ class Activity_3 : AppCompatActivity() {
     public var A_std = 0.0
 
 
+
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
             baseContext, it
@@ -57,10 +58,37 @@ class Activity_3 : AppCompatActivity() {
         var text = intent.getStringExtra("test")
         val  textView_4 = findViewById<TextView>(R.id.textView4)
         textView_4.setText(text)
-        
+
+        val standardButton = findViewById<Button>(R.id.button8)
+        val blankButton = findViewById<Button>(R.id.button7)
+        val waterButton = findViewById<Button>(R.id.button_water)
+
+        standardButton.setOnClickListener {
+            takePhoto("Standard", waterButton)
+        }
+
+        // Set up the "Reagent Blank" button
+
+        blankButton.setOnClickListener {
+            takePhoto("Reagent Blank", standardButton)
+
+        }
+
+        // Set up the "Water" button
+
+        waterButton.setOnClickListener {
+            takePhoto("Water", blankButton)
+
+        }
+
+        standardButton.isEnabled = false
+        blankButton.isEnabled = false
+
         // Request camera permissions
         if (allPermissionsGranted()) {
             startCamera()
+
+            Log.e("M","Done3")
         } else {
             ActivityCompat.requestPermissions(
                 this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
@@ -93,14 +121,39 @@ class Activity_3 : AppCompatActivity() {
             val secondActivityIntent = Intent(
                 applicationContext, Activity_4::class.java
             )
+
+            var x_1 = A_b
+            var x_2 = A_std
+            var y_1 = 0.0
+            val editText = findViewById<EditText>(R.id.editText_y2)
+            val y_2 = editText.text.toString().toDouble()
+            var m = (y_2 - y_1)/(x_2 - x_1)
+
+            var c = y_2 - (m * x_2)
+
+            Log.e("M, C", m.toString() + " " + c.toString())
+
+//            val intent_m = Intent(this@Activity_3, Activity_4::class.java)
+            secondActivityIntent.putExtra("m", m)
+
+            secondActivityIntent.putExtra("c", c)
+
+            secondActivityIntent.putExtra("R_w", R_w)
+
+            secondActivityIntent.putExtra("G_w", G_w)
+
+            secondActivityIntent.putExtra("B_w", B_w)
+
             secondActivityIntent.putExtra("test", text)
             startActivity(secondActivityIntent)
         }
 
+
+
     }
 
 
-    private fun takePhoto(type: String) {
+    private fun takePhoto(type: String, button: Button) {
         val imageCapture = imageCapture ?: return
         val photoFile = File(
             outputDirectory,
@@ -181,6 +234,8 @@ class Activity_3 : AppCompatActivity() {
                         val  B_b = (average_b / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
 
                         A_b =  (s_r*R_b +s_g*G_b+s_b*B_b)/(s_r*R_w +s_g*G_w+s_b*B_w)
+                        button.isEnabled = true
+
                     }
                     else if(type == "Standard"){
                         val  R_s = (average_r / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
@@ -189,42 +244,17 @@ class Activity_3 : AppCompatActivity() {
 
                          A_std = (s_r*R_s +s_g*G_s+s_b*B_s)/(s_r*R_w +s_g*G_w+s_b*B_w)
                     }
-                    else if(type == "water"){
-                          R_w = (average_r / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
-                          G_w = (average_g / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
-                          B_w = (average_b / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
+                    else if(type == "Water"){
+                        R_w = (average_r / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
+                        G_w = (average_g / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
+                        B_w = (average_b / (sqrt((average_r*average_r) +(average_g*average_g)+ (average_b*average_b))))
+
+                        button.isEnabled = true
                     }
 
-                    var x_1 = A_b
-                    var x_2 = A_std
-                    var y_1 =0.0
-                    val editText = findViewById<EditText>(R.id.editText_y2)
-                    val y_2 = editText.text.toString().toDouble()
-                    var m = (y_2 - y_1)/(x_2 - x_1)
 
-                    var c = y_2 - (m*x_2)
 
-                    val intent_m = Intent(this@Activity_3, Activity_4::class.java)
-                    intent_m.putExtra("m", m)
-                    startActivity(intent_m)
-
-                    val intent_c = Intent(this@Activity_3, Activity_4::class.java)
-                    intent_c.putExtra("c", c)
-                    startActivity(intent_c)
-
-                    val intent_R_w = Intent(this@Activity_3, Activity_4::class.java)
-                    intent_R_w.putExtra("R_w", R_w)
-                    startActivity(intent_R_w)
-
-                    val intent_G_w = Intent(this@Activity_3, Activity_4::class.java)
-                    intent_G_w.putExtra("G_w", G_w)
-                    startActivity(intent_G_w)
-
-                    val intent_B_w = Intent(this@Activity_3, Activity_4::class.java)
-                    intent_B_w.putExtra("B_w", B_w)
-                    startActivity(intent_B_w)
-
-                    
+                    Log.e("M","Done2")
                     // RGB values of the image stored in the 3D matrix
                 }
 
@@ -244,22 +274,9 @@ class Activity_3 : AppCompatActivity() {
         cameraProviderFuture.addListener({
 
             // Set up the "Standard" button
-            val standardButton = findViewById<Button>(R.id.button8)
-            standardButton.setOnClickListener {
-                takePhoto("Standard")
-            }
 
-            // Set up the "Reagent Blank" button
-            val blankButton = findViewById<Button>(R.id.button7)
-            blankButton.setOnClickListener {
-                takePhoto("Reagent Blank")
-            }
 
-            // Set up the "Water" button
-            val waterButton = findViewById<Button>(R.id.button_water)
-            waterButton.setOnClickListener {
-                takePhoto("Water")
-            }
+
 
             // Bind the preview and image capture use cases
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
@@ -301,6 +318,11 @@ class Activity_3 : AppCompatActivity() {
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {}
             })
 
+
+            Log.e("M","Done")
+
         }, ContextCompat.getMainExecutor(this))
+
+
     }
 }
